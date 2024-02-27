@@ -152,6 +152,11 @@ function getJumlahDosen() {
     return $jumlahDosen;
 }
 
+// Hapus data dosen
+function delete($id) {
+    global $conn;
+    
+}
 
 
 ?>
