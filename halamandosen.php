@@ -1,0 +1,193 @@
+<?php
+require 'function.php';
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+    <link rel="stylesheet" href="bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap-grid.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-warning fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Selamat datang admin | UNIVERSITAS MAJAPAHIT</a>
+  
+
+      <div class="icon ml-4">
+        <h5>
+           <a href="halamanmasuk.php"><i class="fa-solid fa-backward ml-6" data-toggle="tooltip" title="Back"></i></a>
+        </h5>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="row no-gutters mt-5">
+    <div class="col-md-2 bg-dark mt-2 pr-3 pt-4" id="sidebar">
+    <ul class="nav flex-column ml-3 mb-5">
+  <li class="nav-item">
+    <a class="nav-link active text-white" aria-current="page" href="halamanmasuk.php"><i class="fa-solid fa-gauge mr-2"></i>Dashboard</a><hr class="bg-secondary">
+  </li>
+  <li class="nav-item">
+    <a class="nav-link text-white" href="halamansiswa.php"><i class="fa-solid fa-user-graduate mr-2"></i>Daftar Mahasiswa</a><hr class="bg-secondary">
+  </li>
+  <li class="nav-item">
+    <a class="nav-link text-white" href="halamandosen.php"><i class="fa-solid fa-chalkboard-user mr-2"></i>Daftar Dosen</a><hr class="bg-secondary">
+  </li>
+  <li class="nav-item">
+    <a class="nav-link text-white" href="#"><i class="fa-solid fa-users-viewfinder mr-2"></i>Daftar Pegawai</a><hr class="bg-secondary">
+  </li>
+  <li class="nav-item">
+    <a class="nav-link text-white" href="#"><i class="fa-solid fa-paper-plane mr-2"></i>Nilai Mahasiswa</a><hr class="bg-secondary">
+  </li>
+</ul>
+         </div>
+        <div class="col-md-10">
+            <!-- clas dalam -->
+            <div class="col-md p-7 pt-2">
+                <h3><i class="fa-solid fa-chalkboard-user mr-2"></i>DATA DOSEN</h3>
+
+            <!-- Tambah data dosen starts -->
+            <button href="" class="btn btn-primary mb-4" onclick="openModal()"><i class="fa-solid fa-user-plus mr-2"></i> TAMBAH DATA DOSEN</button>
+             <div id="modalTambahDosen" class="modalDosen">
+            <div class="modal-content-dosen">
+         <span class="close-dosen" onclick="closeModal()">&times;</span>
+           
+         <h2>Tambah data Dosen</h2>
+                        <form id=formTambah action="" method="post">
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li class="li-dosen">
+                <label class="label-tambah-dosen" for="name">NAMA:</label>
+                <input class="input-tambah-id" type="text" name="name" id="name" required >
+            </li>   
+            <li>
+                <label class="label-tambah-dosen" for="name">NIP:</label>
+                <input class="input-tambah-id" type="text" name="nip" id="nip" required>
+            </li>   
+            <li class="li-dosen">
+                <label class="label-tambah-dosen" for="name">JURUSAN:</label>
+                <input class="input-tambah-id" type="text" name="keahlian" id="keahlian" required>
+            </li>   
+            <li class="li-dosen">
+            <label class="label-tambah-dosen" for="status">STATUS:</label>
+            <select class="input-tambah-id" name="status" id="status" required>
+          <option value="aktif">Aktif</option>
+           <option value="tidak aktif">Tidak Aktif</option>
+          </select>
+          </li>
+
+            <li class="li-dosen">
+                <label class="label-tambah-dosen" for="name">EMAIL:</label>
+                <input class="input-tambah-id" type="text" name="email" id="email" required>
+            </li>   
+            <li class="li-dosen">
+                <label class="label-tambah-dosen" for="name">TANGGAL BERGABUNG:</label>
+                <input class="input-tambah-id" type="date" name="tanggalbergabung" id="tanggalbergabung" required>
+            </li>      
+            <li class="li-dosen">
+                <button class="button-id" type="submit" name="submit"><i class="fa-solid fa-paper-plane mr-2"></i>KIRIM</button>
+            </li>
+            </ul>
+            </form>
+             </div>
+              </div>
+              <?php
+if (isset($_POST["submit"])) {
+    if (tamba($_POST) > 0) {
+        echo "
+        <script>
+        alert('Data berhasil ditambahkan')
+        document.location.href = '';
+        </script>
+        ";
+    } else {
+        echo "
+        <script>
+        alert('Data gagal ditambahkan')
+        </script>
+        ";
+    }
+}
+?>
+            <!-- tambah data dosen end -->
+
+
+
+                <table class="table table-striped table-bordered">
+
+        <!-- SEARCH DOSEN -->
+                 <form class="d-flex" method="post" action="">
+                  <input class="form-control me-2" name="keyword" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-outline-success mb-4" name="cari" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+                  </form>
+                  <?php if(isset($_POST["cari"])): ?>
+
+
+
+                    <?php endif; ?>
+
+               <thead>
+                
+                <tr>
+                <th scope="col">NO</th>
+                <th scope="col">NAMA</th>
+                <th scope="col">NIP</th>
+                <th scope="col">JURUSAN</th>
+                <th scope="col">STATUS</th>
+                <th scope="col">EMAIL</th>
+                <th scope="col">TANGGAL BERGABUNG</th>
+                <th colspan="3">EDIT</th>   
+                </tr>
+
+                <?php $a = 1; ?>
+                <?php foreach($data_dosen as $row) : ?>
+               </thead>
+               <tbody>
+
+
+               <tr>
+               <td><?= $a; ?></td>
+                <td><?= $row["name"]; ?></td>
+                <td><?= $row["nip"]; ?></td>
+                <td><?= $row["keahlian"]; ?></td>
+                <td><?= $row["status"]; ?></td>
+                <td><?= $row["email"]; ?></td>
+                <td><?= $row["tanggalbergabung"]; ?></td>
+
+                <td><a  <?= $row["id"];?>> 
+
+            </a>
+
+
+
+                <td>
+                <i class="fas fa-edit bg-warning p-2 text-white" ></i>
+            <a class="button-hapus">
+                <a href="hapus.php?id=<?= $row["id"];?>" onclick="return confirm('Yakin ingin hapus data?');">
+                <i class="fas fa-trash-alt bg-danger p-2 text-white"></i>
+        </a>
+            </a>
+                </td>
+        <?php $a++; ?>
+          <?php endforeach; ?>
+               </tr>
+               </tbody>
+                </table>
+        </div>
+   
+</div>
+          
+
+
+
+<script src="dosen.js"></script>
+</body>
+</html>
