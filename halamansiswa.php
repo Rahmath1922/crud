@@ -86,24 +86,25 @@ require 'function.php';
                         </form>
                     </div>
                 </div>
+
                 <?php
-if (isset($_POST["submit"])) {
-    if (tambah($_POST) > 0) {
-        echo "
-        <script>
-        alert('Data berhasil ditambahkan')
-        document.location.href = '';
-        </script>
-        ";
-    } else {
-        echo "
-        <script>
-        alert('Data gagal ditambahkan')
-        </script>
-        ";
-    }
-}
-?>
+                if (isset($_POST["submit"])) {
+                  if (tambah($_POST) > 0) {
+                      echo "
+                      <script>
+                      alert('Data berhasil ditambahkan')
+                      document.location.href = '';
+                      </script>
+                      ";
+                  } else {
+                      echo "
+                      <script>
+                      alert('Data gagal ditambahkan')
+                      </script>
+                      ";
+                  }
+              }
+                ?>
 <!-- MOdal tambah data end -->
 
 
@@ -150,33 +151,10 @@ if (isset($_POST["submit"])) {
             <td><?= $row["nim"]; ?></td>
             <td><?= $row["city"]; ?></td>
             <td><?= $row["email"]; ?></td>
-            <td><a  <?= $row["id"];?>> 
+            <td><a  <?= $row["id"];?>> </a>
 
-<!-- Edit modal start -->
-
-        <?php
-         if( isset($_POST["edit"])) {
-          // apakah data berhasil diubah atau belum
-          if(edit($_POST) > 0 ) {
-            echo "
-            <script>
-            alert('Data berhasil diubah!');
-            document.location.href = '';
-            </script>
-            ";
-          } else {
-            echo "
-            <script>
-            alert('Tidak ada Perubahan Data');
-            document.location.href = '';
-            </script>
-            ";
-          }
-         }
-
-        ?>
-           
-           <td><a  <?= $row["id"];?>> 
+<!-- Edit modal start -->                 
+           <td><a  <?= $row["id"];?>>    </a>
             <a class="button-edit" onclick="openEdit('<?= $row['id']; ?>', '<?= $row['name']; ?>', '<?= $row['nim']; ?>', '<?=$row['city']; ?>', '<?=$row['email']; ?>' )">
             <i class="fas fa-edit bg-warning p-2 text-white" ></i>
         </a>
@@ -207,7 +185,30 @@ if (isset($_POST["submit"])) {
           </div>   
         </div>
 
-    </a>
+
+        <?php
+         if( isset($_POST["edit"])) {
+          // apakah data berhasil diubah atau belum
+          if(change($_POST) > 0 ) {
+            echo "
+            <script>
+            alert('Data berhasil diubah!');
+            document.location.href = '';
+            </script>
+            ";
+          } else {
+            echo "
+            <script>
+            alert('Tidak ada Perubahan Data');
+            document.location.href = '';
+            </script>
+            ";
+          }
+         }
+  
+        ?>
+
+ 
 
 
 

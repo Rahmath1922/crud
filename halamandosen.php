@@ -14,6 +14,7 @@ require 'function.php';
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
     <link rel="stylesheet" href="bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap-grid.css">
     <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg bg-warning fixed-top">
@@ -99,24 +100,26 @@ require 'function.php';
             </form>
              </div>
               </div>
-              <?php
-if (isset($_POST["submit"])) {
-    if (tamba($_POST) > 0) {
-        echo "
-        <script>
-        alert('Data berhasil ditambahkan')
-        document.location.href = '';
-        </script>
-        ";
-    } else {
-        echo "
-        <script>
-        alert('Data gagal ditambahkan')
-        </script>
-        ";
-    }
-}
-?>
+
+            <?php
+            if (isset($_POST["submit"])) {
+              if (tambahDosen($_POST) > 0) {
+                  echo "
+                  <script>
+                  alert('Data berhasil ditambahkan')
+                  document.location.href = '';
+                  </script>
+                  ";
+              } else {
+                  echo "
+                  <script>
+                  alert('Data gagal ditambahkan')
+                  </script>
+                  ";
+              }
+          }
+            ?>
+
             <!-- tambah data dosen end -->
 
 
@@ -129,6 +132,8 @@ if (isset($_POST["submit"])) {
                   <button class="btn btn-outline-success mb-4" name="cari" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
                   </form>
                   <?php if(isset($_POST["cari"])): ?>
+                  <a href="halamandosen.php" class="kembali-cari"><i class="fa-solid fa-arrow-rotate-left"></i>Back</a>
+                
 
 
 
@@ -162,15 +167,78 @@ if (isset($_POST["submit"])) {
                 <td><?= $row["email"]; ?></td>
                 <td><?= $row["tanggalbergabung"]; ?></td>
 
-                <td><a  <?= $row["id"];?>> 
+                <td><a  <?= $row["id"];?>>  </a>
 
-            </a>
-                  <!-- hgjhg -->
+        <!-- Edit modal start -->
+    
 
-                <td>
-                <i class="fas fa-edit bg-warning p-2 text-white" ></i>
+        <td><a <?= $row["id"]; ?>></a>
+       <a class="button-edit" onclick="openEdit('<?= $row['id']; ?>', '<?= $row['name']; ?>', '<?= $row['nip']; ?>', '<?= $row['keahlian']; ?>', '<?= $row['status']; ?>', '<?= $row['email']; ?>', '<?=$row['tanggalbergabung']; ?>')"> <i class="fas fa-edit bg-warning p-2 text-white" ></i></a> 
+       <div id="modalEditDosen" class="edit">
+        <div class="edit-content">
+          <span class="close-edit" onclick="closeEdit()">&times;</span>
+          <h2>Edit Data Dosen</h2>
+          <form action="" class="form-edit" method="post">
+            <input type="hidden" name="id" id="editId">
+            <div class="div-edit">
+            <label class="label-id" for="name">NAMA</label>
+            <input class="input-id" type="text" name="name" id="editName" required>
+            </div>
+            <div class="div-edit">
+            <label class="label-id" for="name">NIP</label>
+            <input class="input-id" type="text" name="nip" id="editNip" required>
+            </div>
+            <div class="div-edit">
+            <label class="label-id" for="name">JURUSAN</label>
+            <input class="input-id" type="text" name="keahlian" id="editKeahlian" required>
+            </div>
+            <div class="div-edit">
+            <label class="label-id" for="name">STATUS</label>
+            <select class="input-id" type="text" name="status" id="editStatus" required>
+            <option value="Aktif">Aktif</option>
+            <option value="tidak Aktif">Tidak aktif</option>
+            </select>
+            </div>
+            <div class="div-edit">
+            <label class="label-id" for="name">EMAIL</label>
+            <input class="input-id" type="text" name="email" id="editEmail" required>
+            </div>
+            <div class="div-edit">
+            <label class="label-id" for="name">TANGGAL BERGABUNG</label>
+            <input class="input-id" type="date" name="tanggalbergabung" id="editTanggalbergabung" required>
+            </div>
+            <button class="button-id" type="submit" name="edit"><i class="fa-solid fa-floppy-disk">Save</i></button>
+          </form>
+        </div>
+       </div>
+
+       <?php  
+        if( isset($_POST["edit"])) {
+          // apakah data berhasil diubah atau belum
+          if(change($_POST) > 0 ) {
+            echo "
+            <script>
+            alert('Data berhasil diubah!');
+            document.location.href = '';
+            </script>
+            ";
+          } else {
+            echo "
+            <script>
+            alert('Tidak ada Perubahan Data');
+            document.location.href = '';
+            </script>
+            ";
+          }
+         }
+  
+       ?>
+
+        <!-- Edit modal end -->
+                 
+
             <a class="button-hapus">
-                <a href="hapus.php?id=<?= $row["id"];?>" onclick="return confirm('Yakin ingin hapus data?');">
+                <a href="hapus2.php?id=<?= $row["id"]; ?>" onclick="return confirm('Yakin ingin hapus data?');">
                 <i class="fas fa-trash-alt bg-danger p-2 text-white"></i>
         </a>
             </a>

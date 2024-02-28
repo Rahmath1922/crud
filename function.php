@@ -38,6 +38,7 @@ function tambah($data) {
    return mysqli_affected_rows($conn);
 }
 
+
 //hapus
 function hapus($id) {
     // var_dump($id);
@@ -67,7 +68,6 @@ function edit($data) {
 mysqli_query($conn, $query);
      
      return mysqli_affected_rows($conn);
-
 }
 
 
@@ -105,7 +105,7 @@ function getJumlahMahasiswa() {
 
 
 // function tambah data
-function tamba($data) {
+function tambahDosen($data) {
     global $conn;
     $name = htmlspecialchars($data["name"]);
     $nip = htmlspecialchars($data["nip"]);
@@ -122,6 +122,7 @@ function tamba($data) {
    mysqli_query($conn, $query);
    return mysqli_affected_rows($conn);
 }
+
 
 
 
@@ -155,8 +156,37 @@ function getJumlahDosen() {
 // Hapus data dosen
 function delete($id) {
     global $conn;
-    
+    mysqli_query($conn, "DELETE FROM data_dosen WHERE id = $id");
+    return mysqli_affected_rows($conn);
 }
+
+// edit
+function change($data) {
+    //  var_dump($data);
+        global $conn;
+        
+        $id = $data["id"];
+        $name = htmlspecialchars($data["name"]);
+        $nip = htmlspecialchars($data["nip"]);
+        $keahlian = htmlspecialchars($data["keahlian"]);
+        $status = htmlspecialchars($data["status"]);
+        $email = htmlspecialchars($data["email"]);
+        $tanggalbergabung = htmlspecialchars($data["tanggalbergabung"]);
+    
+        $query = "UPDATE data_dosen SET
+                 name = '$name',
+                 nip = '$nip',
+                 keahlian = '$keahlian',
+                 status = '$status',
+                 email = '$email',
+                 tanggalbergabung = '$tanggalbergabung'
+                 WHERE id = $id
+               ";
+    mysqli_query($conn, $query);
+         
+         return mysqli_affected_rows($conn);
+    
+    }
 
 
 ?>
