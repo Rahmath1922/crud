@@ -1,5 +1,5 @@
 <?php
-require 'function.php';
+require 'function/functiondosen.php';
 
 ?>
 
@@ -13,13 +13,13 @@ require 'function.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
     <link rel="stylesheet" href="bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap-grid.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 
 </head>
 <body>
 <nav class="navbar navbar-expand-lg bg-warning fixed-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Selamat datang admin | UNIVERSITAS MAJAPAHIT</a>
+    <a class="navbar-brand" href="#">Selamat datang admin</a>
   
 
       <div class="icon ml-4">
@@ -44,12 +44,19 @@ require 'function.php';
     <a class="nav-link text-white" href="halamandosen.php"><i class="fa-solid fa-chalkboard-user mr-2"></i>Daftar Dosen</a><hr class="bg-secondary">
   </li>
   <li class="nav-item">
-    <a class="nav-link text-white" href="#"><i class="fa-solid fa-users-viewfinder mr-2"></i>Daftar Pegawai</a><hr class="bg-secondary">
-  </li>
-  <li class="nav-item">
     <a class="nav-link text-white" href="#"><i class="fa-solid fa-paper-plane mr-2"></i>Nilai Mahasiswa</a><hr class="bg-secondary">
   </li>
-</ul>
+  <li class="nav-item">
+    <a class="nav-link text-white" href="matakuliah.php"><i class="fa-solid fa-book-open"></i>Mata kuliah</a><hr class="bg-secondary">
+  </li>
+  <li class="nav-item">
+    <a class="nav-link text-white" href="jurusan.php"><i class="fa-solid fa-scroll"></i>Jurusan</a><hr class="bg-secondary">
+  </li>
+  <li class="nav-item">
+    <a class="nav-link text-white" href="halamanpegawai.php"><i class="fa-solid fa-users-viewfinder mr-2"></i>Daftar Pegawai</a><hr class="bg-secondary">
+  </li>
+</ul> 
+
          </div>
         <div class="col-md-10">
             <!-- clas dalam -->
@@ -63,13 +70,15 @@ require 'function.php';
          <span class="close-dosen" onclick="closeModal()">&times;</span>
            
          <h2>Tambah data Dosen</h2>
-                        <form id=formTambah action="" method="post">
-                        <ul style="list-style: none; padding: 0; margin: 0;">
-                        <li class="li-dosen">
+        <form id=formTambah action="" method="post">
+         <ul style="list-style: none; padding: 0; margin: 0;">
+
+               <li class="li-dosen">
                 <label class="label-tambah-dosen" for="name">NAMA:</label>
                 <input class="input-tambah-id" type="text" name="name" id="name" required >
-            </li>   
-            <li>
+            </li> 
+
+               <li class="li-dosen">
                 <label class="label-tambah-dosen" for="name">NIP:</label>
                 <input class="input-tambah-id" type="text" name="nip" id="nip" required>
             </li>   
@@ -123,22 +132,47 @@ require 'function.php';
             <!-- tambah data dosen end -->
 
 
-
+<div>
                 <table class="table table-striped table-bordered">
 
         <!-- SEARCH DOSEN -->
                  <form class="d-flex" method="post" action="">
-                  <input class="form-control me-2" name="keyword" type="search" placeholder="Search" aria-label="Search">
+                  <input class="form-control me-2 " name="keyword" type="search" placeholder="Search" aria-label="Search" required>
                   <button class="btn btn-outline-success mb-4" name="cari" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
-                  </form>
+                 
+
+        <!-- PAGINATION -->
+        <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+        <li class="page-item<?= ($halamanAktifDosen == 1) ? ' disabled' : ''; ?>">
+            <a class="page-link" href="?halaman=<?= ($halamanAktifDosen - 1); ?>" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        <?php for ($i = max(1, $halamanAktifDosen - 1); $i <= min($halamanAktifDosen + 1, $jumlahHalamanDosen); $i++) : ?>
+            <li class="page-item <?= ($i == $halamanAktifDosen) ? 'active' : ''; ?>">
+                <a class="page-link" href="?halaman=<?= $i; ?>"><?= $i; ?></a>
+            </li>
+        <?php endfor; ?>
+
+        <li class="page-item <?= ($halamanAktifDosen == $jumlahHalamanDosen) ? 'disabled' : ''; ?>">
+            <a class="page-link" href="?halaman=<?= ($halamanAktifDosen + 1); ?>" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+       
+
+
                   <?php if(isset($_POST["cari"])): ?>
                   <a href="halamandosen.php" class="kembali-cari"><i class="fa-solid fa-arrow-rotate-left"></i>Back</a>
                 
-
-
-
                     <?php endif; ?>
-
+                  </form>
+                
                <thead>
                 
                 <tr>
@@ -151,13 +185,13 @@ require 'function.php';
                 <th scope="col">TANGGAL BERGABUNG</th>
                 <th colspan="3">EDIT</th>   
                 </tr>
+                </thead>
 
-                <?php $a = 1; ?>
-                <?php foreach($data_dosen as $row) : ?>
-               </thead>
+                
+                <?php $a = 1 + $awalDataDosen ?>
+                <?php foreach($dosen as $row) : ?>
+              
                <tbody>
-
-
                <tr>
                <td><?= $a; ?></td>
                 <td><?= $row["name"]; ?></td>
@@ -167,13 +201,14 @@ require 'function.php';
                 <td><?= $row["email"]; ?></td>
                 <td><?= $row["tanggalbergabung"]; ?></td>
 
-                <td><a  <?= $row["id"];?>>  </a>
+             
 
         <!-- Edit modal start -->
     
 
         <td><a <?= $row["id"]; ?>></a>
        <a class="button-edit" onclick="openEdit('<?= $row['id']; ?>', '<?= $row['name']; ?>', '<?= $row['nip']; ?>', '<?= $row['keahlian']; ?>', '<?= $row['status']; ?>', '<?= $row['email']; ?>', '<?=$row['tanggalbergabung']; ?>')"> <i class="fas fa-edit bg-warning p-2 text-white" ></i></a> 
+       
        <div id="modalEditDosen" class="edit">
         <div class="edit-content">
           <span class="close-edit" onclick="closeEdit()">&times;</span>
@@ -189,25 +224,25 @@ require 'function.php';
             <input class="input-id" type="text" name="nip" id="editNip" required>
             </div>
             <div class="div-edit">
-            <label class="label-id" for="name">JURUSAN</label>
+            <label class="label-id" for="keahlian">JURUSAN</label>
             <input class="input-id" type="text" name="keahlian" id="editKeahlian" required>
             </div>
             <div class="div-edit">
-            <label class="label-id" for="name">STATUS</label>
+            <label class="label-id" for="status">STATUS</label>
             <select class="input-id" type="text" name="status" id="editStatus" required>
             <option value="Aktif">Aktif</option>
             <option value="tidak Aktif">Tidak aktif</option>
             </select>
             </div>
             <div class="div-edit">
-            <label class="label-id" for="name">EMAIL</label>
+            <label class="label-id" for="email">EMAIL</label>
             <input class="input-id" type="text" name="email" id="editEmail" required>
             </div>
             <div class="div-edit">
-            <label class="label-id" for="name">TANGGAL BERGABUNG</label>
+            <label class="label-id" for="tanggalBergabung">TANGGAL BERGABUNG</label>
             <input class="input-id" type="date" name="tanggalbergabung" id="editTanggalbergabung" required>
             </div>
-            <button class="button-id" type="submit" name="edit"><i class="fa-solid fa-floppy-disk">Save</i></button>
+            <button class="button-id" type="submit" name="edit"><i class="fa-solid fa-floppy-disk"></i>Save</button>
           </form>
         </div>
        </div>
@@ -255,6 +290,6 @@ require 'function.php';
 
 
 
-<script src="dosen.js"></script>
+<script src="js/dosen.js"></script>
 </body>
 </html>

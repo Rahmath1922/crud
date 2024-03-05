@@ -5,11 +5,12 @@ if(!isset($_SESSION["login"])) {
     exit;
 }
 
-require 'function.php';
+require 'function/functiondashboard.php';
 
 
 $jumlahMahasiswa = getJumlahMahasiswa();
 $jumlahDosen = getJumlahDosen();
+$jumlahPegawai = getJumlahPegawai();
 ?>
 
 <!DOCTYPE html>
@@ -22,12 +23,12 @@ $jumlahDosen = getJumlahDosen();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
     <link rel="stylesheet" href="bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap-grid.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg bg-warning fixed-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Selamat datang admin | UNIVERSITAS MAJAPAHIT</a>
+    <a class="navbar-brand" href="#">Selamat datang admin</a>
   
 
       <div class="icon ml-4">
@@ -43,7 +44,7 @@ $jumlahDosen = getJumlahDosen();
     <div class="col-md-2 bg-dark mt-2 pr-3 pt-4" id="sidebar">
     <ul class="nav flex-column ml-3 mb-5">
   <li class="nav-item">
-    <a class="nav-link active text-white" aria-current="page" href="#"><i class="fa-solid fa-gauge mr-2"></i>Dashboard</a><hr class="bg-secondary">
+    <a class="nav-link active text-white" aria-current="page" href="halamanmasuk.php"><i class="fa-solid fa-gauge mr-2"></i>Dashboard</a><hr class="bg-secondary">
   </li>
   <li class="nav-item">
     <a class="nav-link text-white" href="halamansiswa.php"><i class="fa-solid fa-user-graduate mr-2"></i>Daftar Mahasiswa</a><hr class="bg-secondary">
@@ -52,10 +53,16 @@ $jumlahDosen = getJumlahDosen();
     <a class="nav-link text-white" href="halamandosen.php"><i class="fa-solid fa-chalkboard-user mr-2"></i>Daftar Dosen</a><hr class="bg-secondary">
   </li>
   <li class="nav-item">
-    <a class="nav-link text-white" href="#"><i class="fa-solid fa-users-viewfinder mr-2"></i>Daftar Pegawai</a><hr class="bg-secondary">
+    <a class="nav-link text-white" href="#"><i class="fa-solid fa-paper-plane mr-2"></i>Nilai Mahasiswa</a><hr class="bg-secondary">
   </li>
   <li class="nav-item">
-    <a class="nav-link text-white" href="#"><i class="fa-solid fa-paper-plane mr-2"></i>Nilai Mahasiswa</a><hr class="bg-secondary">
+    <a class="nav-link text-white" href="matakuliah.php"><i class="fa-solid fa-book-open"></i>Mata kuliah</a><hr class="bg-secondary">
+  </li>
+  <li class="nav-item">
+    <a class="nav-link text-white" href="jurusan.php"><i class="fa-solid fa-scroll"></i>Jurusan</a><hr class="bg-secondary">
+  </li>
+  <li class="nav-item">
+    <a class="nav-link text-white" href="halamanpegawai.php"><i class="fa-solid fa-users-viewfinder mr-2"></i>Daftar Pegawai</a><hr class="bg-secondary">
   </li>
 </ul>
          </div>
@@ -65,7 +72,7 @@ $jumlahDosen = getJumlahDosen();
                 <h3><i class="fa-solid fa-gauge mr-2"></i>Dashboard</h3>
 
                 <div class="row text-white">
-                <div class="card bg-info m-5" style="width: 18rem;">             
+                <div class="card bg-info m-4" style="width: 18rem;">             
                 <div class="card-body">
                     <div class="car-body-icon">
                     <i class="fa-solid fa-user-graduate mr-2"></i>
@@ -76,32 +83,58 @@ $jumlahDosen = getJumlahDosen();
   </div>
 </div>
 
-<div class="card bg-danger m-5" style="width: 18rem;">             
+
+              <div class="card bg-danger m-4" style="width: 18rem;">             
                 <div class="card-body">
                     <div class="car-body-icon">
                     <i class="fa-solid fa-chalkboard-user mr-2"></i>
                     </div>
                <h5 class="card-title">Jumlah Dosen</h5>
                 <div class="display-4" id="display-4"><?= $jumlahDosen; ?></div>
-                <p class="card-text text-white">Lihat detail<i class="fa-solid fa-eye ml-2"></i></p>
-  </div>
+                <a href="halamandosen.php" style="text-decoration: none !important;"><p class="card-text text-white">Lihat detail<i class="fa-solid fa-eye ml-2"></i></p></a>
+
+</div>
 </div>
 
-<div class="card bg-success m-5" style="width: 18rem;">             
+               <div class="card bg-success m-4" style="width: 18rem;">             
                 <div class="card-body">
                     <div class="car-body-icon">
                     <i class="fa-solid fa-users-viewfinder mr-2"></i>
                     </div>
                <h5 class="card-title">Jumlah Pegawai</h5>
-               <div class="display-4" id="display-4">17</div>
-              <p class="card-text text-white">Lihat detail<i class="fa-solid fa-eye ml-2"></i></p>
-  </div>
+               <div class="display-4" id="display-4"><?= $jumlahPegawai; ?></div>
+              <a href="halamanpegawai.php" style="text-decoration: none !important;"><p class="card-text text-white">Lihat detail<i class="fa-solid fa-eye ml-2"></i></p></a>
+ 
+</div>
+</div>
+
+               <div class="card bg-warning m-4" style="width: 18rem;">             
+                <div class="card-body">
+                    <div class="car-body-icon">
+                    <i class="fa-solid fa-book-open"></i>
+                    </div>
+               <h5 class="card-title">Mata kuliah</h5>
+               <div class="display-4" id="display-4">11</div>
+              <a href="matakuliah.php" style="text-decoration: none !important;"><p class="card-text text-white">Lihat detail<i class="fa-solid fa-eye ml-2"></i></p></a>
+ 
+</div>
+</div>
+
+                <div class="card bg-secondary m-4" style="width: 18rem;">             
+                <div class="card-body">
+                    <div class="car-body-icon">
+                    <i class="fa-solid fa-scroll"></i>
+                    </div>
+               <h5 class="card-title">Jurusan</h5>
+               <div class="display-4" id="display-4">11</div>
+              <a href="matakuliah.php" style="text-decoration: none !important;"><p class="card-text text-white">Lihat detail<i class="fa-solid fa-eye ml-2"></i></p></a>
+ 
+</div>
 </div>
                 </div>
             </div>
         </div>
-   
-</div>
+
     
 </body>
 </html>

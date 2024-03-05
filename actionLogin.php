@@ -5,7 +5,7 @@ if( isset($_SESSION["login"])) {
     exit;
 }
 
-require 'function.php';
+require 'function/functiondashboard.php';
 $username = "";
 $password = "";
 $err = "";

@@ -1,5 +1,5 @@
 <?php
-require 'function.php';
+require 'function/functionmahasiswa.php';
 
 if(isset($_GET["id"]) && $_GET["id"] !== ""){
     $id = $_GET["id"];

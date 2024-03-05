@@ -1,9 +1,5 @@
 <?php
-// Koneksi ke database php my admin saya
-$cons = mysqli_connect("localhost", "root", "", "multiuser");
-if(!$cons) {
-    die("koneksi gagal: " . mysqli_connect_error());
-}
+
 $conn = mysqli_connect("localhost", "root", "", "data_mahasiswa");
 if(!$conn) {
     die("Koneksi kedatabase data_mahasiswa gagal: " . mysqli_connect_error());
@@ -20,88 +16,18 @@ function query($query) {
     }
     return $rows;
 }
-
-// function tambah data
-function tambah($data) {
-    global $conn;
-    $name = htmlspecialchars($data["name"]);
-    $nim = htmlspecialchars($data["nim"]);
-    $city = htmlspecialchars($data["city"]);
-    $email = htmlspecialchars($data["email"]);
-    
-//insert data
-   $query = "INSERT INTO data_siswa
-            VALUES
-            ('', '$name', '$nim', '$city', '$email')
-   "; 
-   mysqli_query($conn, $query);
-   return mysqli_affected_rows($conn);
-}
-
-
-//hapus
-function hapus($id) {
-    // var_dump($id);
-    global $conn;
-    mysqli_query($conn, "DELETE FROM data_siswa WHERE id = $id");
-    return mysqli_affected_rows($conn);
-}
-
-// edit
-function edit($data) {
-// var_dump($data);
-    global $conn;
-    
-    $id = $data["id"];
-    $name = htmlspecialchars($data["name"]);
-    $nim = htmlspecialchars($data["nim"]);
-    $city = htmlspecialchars($data["city"]);
-    $email = htmlspecialchars($data["email"]);
-
-    $query = "UPDATE data_siswa SET
-             name = '$name',
-             nim = '$nim',
-             city = '$city',
-             email = '$email'
-             WHERE id = $id
-           ";
-mysqli_query($conn, $query);
-     
-     return mysqli_affected_rows($conn);
-}
-
-
-// function cari
-if (isset($_POST["cari"])) {
-    $data_siswa = cari($_POST["keyword"]);
-} else{
-$data_siswa = query("SELECT * FROM data_siswa");
-}
-
-function cari($keyword) {
-    $query = "SELECT * FROM data_siswa WHERE
-            name LIKE '%$keyword%' OR
-            nim LIKE '%$keyword%' OR
-            city LIKE '%$keyword%' OR
-            email LIKE '%$keyword%'     
-            ";
-            return query($query);
-}
-
-
-// function halaman dashboard
-function getJumlahMahasiswa() {
-    $result = query("SELECT COUNT(*) AS jumlah FROM data_siswa");
-    $jumlahMahasiswa = $result[0]['jumlah'];
-    return $jumlahMahasiswa;
-}
-
-
-
-
-
-
 // HALAMAN DATA DOSEN
+
+
+// Paganation halaman dosen
+$jumlahDataPerHalamanDosen = 5;
+$jumlahDataDosen = count(query("SELECT * FROM data_dosen"));
+$jumlahHalamanDosen = ceil($jumlahDataDosen / $jumlahDataPerHalamanDosen);
+$halamanAktifDosen = (isset($_GET["halaman"]) && $_GET["halaman"] > 0) ? $_GET["halaman"] : 1;
+
+
+$awalDataDosen = ($jumlahDataPerHalamanDosen * $halamanAktifDosen) - $jumlahDataPerHalamanDosen;
+$dosen = query("SELECT * FROM data_dosen LIMIT $awalDataDosen, $jumlahDataPerHalamanDosen");
 
 
 // function tambah data
@@ -129,10 +55,12 @@ function tambahDosen($data) {
 
 // function cari
 if (isset($_POST["cari"])) {
-    $data_dosen = car($_POST["keyword"]);
-} else{
-$data_dosen = query("SELECT * FROM data_dosen");
+    $dosen = car($_POST["keyword"]);
+} else {
+    $awalDataDosen = ($jumlahDataPerHalamanDosen * $halamanAktifDosen) - $jumlahDataPerHalamanDosen;
+    $dosen = query("SELECT * FROM data_dosen LIMIT $awalDataDosen, $jumlahDataPerHalamanDosen");
 }
+
 function car($keyword) {
     $query = "SELECT * FROM data_dosen WHERE
             name LIKE '%$keyword%' OR
@@ -187,6 +115,7 @@ function change($data) {
          return mysqli_affected_rows($conn);
     
     }
+
 
 
 ?>
