@@ -10,6 +10,24 @@ if(!$conn) {
 }
 
 
+// KONFIGURASI PAGINATION
+$jumlahDataPerHalaman = 5;
+$jumlahData = count(query("SELECT * FROM data_siswa"));
+$jumlahHalaman = ceil($jumlahData / $jumlahDataPerHalaman);
+
+$halamanAktif = (isset($_GET["halaman"])) ? $_GET["halaman"] : 1;
+
+$awalData = ($jumlahDataPerHalaman * ($halamanAktif - 1));
+
+$query = "SELECT data_siswa.*, jurusan.name AS jurusan_name
+          FROM data_siswa
+          INNER JOIN jurusan ON data_siswa.prodi_id = jurusan.id 
+          LIMIT $awalData, $jumlahDataPerHalaman";
+
+$mahasiswa = query($query);
+
+
+
 // query data
 function query($query) {
     global $conn;
@@ -25,6 +43,7 @@ function query($query) {
 function tambah($data) {
     global $conn;
     $name = htmlspecialchars($data["name"]);
+    $prodi = htmlspecialchars($data["prodi_id"]);
     $nim = htmlspecialchars($data["nim"]);
     $city = htmlspecialchars($data["city"]);
     $email = htmlspecialchars($data["email"]);
@@ -32,11 +51,12 @@ function tambah($data) {
 //insert data
    $query = "INSERT INTO data_siswa
             VALUES
-            ('', '$name', '$nim', '$city', '$email')
+            ('', '$name', '$prodi', '$nim', '$city', '$email')
    "; 
    mysqli_query($conn, $query);
    return mysqli_affected_rows($conn);
 }
+
 
 //hapus
 function hapus($id) {
@@ -54,6 +74,7 @@ function edit($data) {
     $id = $data["id"];
     $name = htmlspecialchars($data["name"]);
     $nim = htmlspecialchars($data["nim"]);
+    $prodi = htmlspecialchars($data["prodi"]);
     $city = htmlspecialchars($data["city"]);
     $email = htmlspecialchars($data["email"]);
 
@@ -67,25 +88,26 @@ function edit($data) {
 mysqli_query($conn, $query);
      
      return mysqli_affected_rows($conn);
-
 }
 
 
-// function cari
-if (isset($_POST["cari"])) {
-    $data_siswa = cari($_POST["keyword"]);
-} else{
-$data_siswa = query("SELECT * FROM data_siswa");
-}
 
+
+
+// function cari        
 function cari($keyword) {
-    $query = "SELECT * FROM data_siswa WHERE
-            name LIKE '%$keyword%' OR
-            nim LIKE '%$keyword%' OR
-            city LIKE '%$keyword%' OR
-            email LIKE '%$keyword%'     
+    $query = "SELECT data_siswa.*, jurusan.name AS jurusan_name
+              FROM data_siswa
+              INNER JOIN jurusan ON data_siswa.prodi_id = jurusan.id 
+              WHERE
+              data_siswa.name LIKE '%$keyword%' OR
+              data_siswa.prodi LIKE '%$keyword%' OR
+              data_siswa.nim LIKE '%$keyword%' OR
+              data_siswa.city LIKE '%$keyword%' OR
+              data_siswa.email LIKE '%$keyword%' OR
+              jurusan.name LIKE '%$keyword%'
             ";
-            return query($query);
+    return query($query);
 }
 
 
@@ -95,68 +117,3 @@ function getJumlahMahasiswa() {
     $jumlahMahasiswa = $result[0]['jumlah'];
     return $jumlahMahasiswa;
 }
-
-
-
-
-
-
-// HALAMAN DATA DOSEN
-
-
-// function tambah data
-function tamba($data) {
-    global $conn;
-    $name = htmlspecialchars($data["name"]);
-    $nip = htmlspecialchars($data["nip"]);
-    $keahlian = htmlspecialchars($data["keahlian"]);
-    $status = htmlspecialchars($data["status"]);
-    $email = htmlspecialchars($data["email"]);
-    $tanggalbergabung = htmlspecialchars($data["tanggalbergabung"]);
-    
-//insert data
-   $query = "INSERT INTO data_dosen
-            VALUES
-            ('', '$name', '$nip', '$keahlian', '$status', '$email', '$tanggalbergabung')
-   "; 
-   mysqli_query($conn, $query);
-   return mysqli_affected_rows($conn);
-}
-
-
-
-
-// function cari
-if (isset($_POST["cari"])) {
-    $data_dosen = car($_POST["keyword"]);
-} else{
-$data_dosen = query("SELECT * FROM data_dosen");
-}
-function car($keyword) {
-    $query = "SELECT * FROM data_dosen WHERE
-            name LIKE '%$keyword%' OR
-            nip LIKE '%$keyword%' OR
-            keahlian LIKE '%$keyword%' OR
-            status LIKE '%$keyword%' OR
-            email LIKE '%$keyword%' OR
-            tanggalbergabung LIKE '%$keyword%'     
-            ";
-            return query($query);
-}
-
-
-// function halaman dashboard
-function getJumlahDosen() {
-    $result = query("SELECT COUNT(*) AS jumlah FROM data_dosen");
-    $jumlahDosen = $result[0]['jumlah'];
-    return $jumlahDosen;
-}
-
-// Hapus data dosen
-function delete($id) {
-    global $conn;
-    
-}
-
-
-?>
